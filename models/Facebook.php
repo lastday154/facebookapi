@@ -145,11 +145,14 @@ class Facebook extends Model
                 return [self::ERROR => 'no post found'];
             }
             $postModel = new Post;
-            Yii::$app->db->createCommand()->batchInsert(Post::tableName(), $postModel->attributes(), $postRows)->execute();
+            $db = Yii::$app->db;
+            $sql = $db->queryBuilder->batchInsert(Post::tableName(), $postModel->attributes(), $postRows);
+            $db->createCommand(str_replace("INSERT INTO ","REPLACE INTO",$sql))->execute();
             if (!empty($likesRow)) {
                 $likeColumns = $likeModel->attributes();
                 array_shift($likeColumns);
-                Yii::$app->db->createCommand()->batchInsert(Like::tableName(), $likeColumns, $likesRow)->execute();
+                $sql = $db->queryBuilder->batchInsert(Like::tableName(), $likeColumns, $likesRow);
+                $db->createCommand(str_replace("INSERT INTO ","REPLACE INTO",$sql))->execute();
             }
             return ['success' => true];
         } catch (Exception $exception) {

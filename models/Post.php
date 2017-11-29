@@ -8,21 +8,36 @@ use Yii;
  * This is the model class for table "post".
  *
  * @property string $post_id
- * @property integer $page_id
+ * @property string $page_id
  * @property string $from_name
  * @property string $from_category
- * @property integer $from_id
+ * @property string $from_id
  * @property string $to_name
  * @property string $to_category
- * @property integer $to_id
+ * @property string $to_id
  * @property string $message
  * @property integer $message_tags
+ * @property string $picture
+ * @property string $link
+ * @property string $name
+ * @property string $caption
+ * @property string $description
+ * @property string $source
+ * @property string $properties
+ * @property string $icon
+ * @property string $actions
+ * @property string $privacy
+ * @property string $type
+ * @property string $place
+ * @property string $story
  * @property integer $number_of_likes
  * @property integer $number_of_comments
+ * @property string $object_id
+ * @property string $application
+ * @property string $created_time
+ * @property string $updated_time
  * @property integer $with_tags
  * @property string $data_aquired_time
- *
- * @property Like[] $likes
  */
 class Post extends \yii\db\ActiveRecord
 {
@@ -39,7 +54,7 @@ class Post extends \yii\db\ActiveRecord
     const NUMBER_OF_LIKES = 'number_of_likes';
 
     const NUMBER_OF_COMMENTS = 'number_of_comments';
-
+    
     /**
      * @inheritdoc
      */
@@ -55,10 +70,11 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['post_id', 'page_id'], 'required'],
-            [['page_id', 'from_id', 'to_id', 'message_tags', 'number_of_likes', 'number_of_comments', 'with_tags'], 'integer'],
-            [['message'], 'string'],
-            [['data_aquired_time'], 'safe'],
-            [['post_id', 'from_name', 'from_category', 'to_name', 'to_category'], 'string', 'max' => 255],
+            [['message', 'actions', 'privacy', 'type', 'story'], 'string'],
+            [['message_tags', 'number_of_likes', 'number_of_comments', 'with_tags'], 'integer'],
+            [['created_time', 'updated_time', 'data_aquired_time'], 'safe'],
+            [['post_id', 'page_id', 'from_name', 'from_category', 'from_id', 'to_name', 'to_category', 'to_id', 'place', 'object_id', 'application'], 'string', 'max' => 255],
+            [['picture', 'link', 'name', 'caption', 'description', 'source', 'properties', 'icon'], 'string', 'max' => 2083],
             [['post_id'], 'unique'],
         ];
     }
@@ -79,18 +95,27 @@ class Post extends \yii\db\ActiveRecord
             'to_id' => 'To ID',
             'message' => 'Message',
             'message_tags' => 'Message Tags',
+            'picture' => 'Picture',
+            'link' => 'Link',
+            'name' => 'Name',
+            'caption' => 'Caption',
+            'description' => 'Description',
+            'source' => 'Source',
+            'properties' => 'Properties',
+            'icon' => 'Icon',
+            'actions' => 'Actions',
+            'privacy' => 'Privacy',
+            'type' => 'Type',
+            'place' => 'Place',
+            'story' => 'Story',
             'number_of_likes' => 'Number Of Likes',
             'number_of_comments' => 'Number Of Comments',
+            'object_id' => 'Object ID',
+            'application' => 'Application',
+            'created_time' => 'Created Time',
+            'updated_time' => 'Updated Time',
             'with_tags' => 'With Tags',
             'data_aquired_time' => 'Data Aquired Time',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLikes()
-    {
-        return $this->hasMany(Like::className(), ['fk_post_id' => 'post_id']);
     }
 }
